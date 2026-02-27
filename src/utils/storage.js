@@ -20,7 +20,8 @@ export const defaultState = () => ({
   logs: {},
   lastVisit: null,
   // User-created content
-  customTasks: {}, // { "d1": [...tasks] } — overrides that day's task list
-  customFocus: {}, // { "d1": "My focus text" } — overrides day's focus heading
+  customTasks: {}, // { "d1": [...tasks] } — all user tasks per day (starts empty)
+  customFocus: {}, // { "d1": "focus text" } — user-set day heading
+  customWeeks: {}, // { "w1": { title, subtitle } } — user-set week names
   hasSeenOnboarding: false,
 });

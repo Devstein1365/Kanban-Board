@@ -21,13 +21,13 @@ const STEPS = [
     icon: BsCalendarCheck,
     color: "var(--green)",
     title: "Today tab",
-    body: "Every day has a default schedule to guide you. Check tasks off as you complete them and navigate to any day with the arrows.",
+    body: "Every day starts blank — it's yours to fill. Navigate to any day with the arrows and add your own tasks with the + button.",
   },
   {
     icon: BsPlusCircle,
     color: "var(--accent)",
-    title: "Customise your tasks",
-    body: "Tap the blue + button to add your own tasks to any day. Tap a task to expand it, then use Edit or Delete to change it.",
+    title: "Build your daily schedule",
+    body: "Tap + to add a task: give it a name, a time slot, a type and optional notes. Tap any task to edit or delete it.",
   },
   {
     icon: BsCheckCircle,
@@ -45,7 +45,7 @@ const STEPS = [
     icon: BsBarChart,
     color: "var(--orange)",
     title: "Weeks overview",
-    body: "The Weeks tab shows your full 30-day grid with colour-coded completion chips and a running progress bar per week.",
+    body: "The Weeks tab shows your 30-day grid split into 4 weeks. Tap the pencil icon on any week to rename it to match your goals.",
   },
   {
     icon: BsRocketTakeoff,

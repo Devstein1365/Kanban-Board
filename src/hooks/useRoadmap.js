@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ALL_DAYS, WEEKS } from "../data/constants";
+import { WEEKS } from "../data/constants";
 import { loadState, defaultState, STORAGE_KEY } from "../utils/storage";
 
 export function useRoadmap() {
@@ -15,13 +15,11 @@ export function useRoadmap() {
 
   // ── Derived values ──────────────────────────────────────────────────────────
   const dayKey = "d" + state.currentDay;
-  const baseDay =
-    ALL_DAYS.find((d) => d.day === state.currentDay) || ALL_DAYS[0];
-  // Merge user overrides on top of template data
+  // Pure user-driven data — no hardcoded fallback tasks
   const dayData = {
-    ...baseDay,
-    focus: state.customFocus?.[dayKey] || baseDay.focus,
-    tasks: state.customTasks?.[dayKey] || baseDay.tasks,
+    day: state.currentDay,
+    focus: state.customFocus?.[dayKey] || "",
+    tasks: state.customTasks?.[dayKey] || [],
   };
   const week = WEEKS.find((w) => w.days.includes(state.currentDay)) || WEEKS[0];
   const checks = state.taskChecks?.[dayKey] || {};
@@ -36,12 +34,11 @@ export function useRoadmap() {
       const c = { ...(s.taskChecks[key] || {}) };
       c[idx] = !c[idx];
       const newChecks = { ...s.taskChecks, [key]: c };
-      const tasks =
-        s.customTasks?.[key] ||
-        (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0]).tasks;
+      const tasks = s.customTasks?.[key] || [];
       const doneTasks = Object.values(c).filter(Boolean).length;
-      const allDone =
-        doneTasks >= tasks.filter((t) => t.type !== "break").length;
+      const nonBreakCount = tasks.filter((t) => t.type !== "break").length;
+      // Only mark complete if there are tasks and all non-break ones are done
+      const allDone = nonBreakCount > 0 && doneTasks >= nonBreakCount;
       const completedDays =
         allDone && !s.completedDays.includes(s.currentDay)
           ? [...s.completedDays, s.currentDay]
@@ -101,9 +98,7 @@ export function useRoadmap() {
   const addTask = (task) =>
     update((s) => {
       const key = "d" + s.currentDay;
-      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
-        .tasks;
-      const existing = s.customTasks?.[key] || base;
+      const existing = s.customTasks?.[key] || [];
       return {
         ...s,
         customTasks: { ...s.customTasks, [key]: [...existing, task] },
@@ -113,9 +108,7 @@ export function useRoadmap() {
   const editTask = (idx, task) =>
     update((s) => {
       const key = "d" + s.currentDay;
-      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
-        .tasks;
-      const existing = [...(s.customTasks?.[key] || base)];
+      const existing = [...(s.customTasks?.[key] || [])];
       existing[idx] = task;
       return { ...s, customTasks: { ...s.customTasks, [key]: existing } };
     });
@@ -123,9 +116,7 @@ export function useRoadmap() {
   const deleteTask = (idx) =>
     update((s) => {
       const key = "d" + s.currentDay;
-      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
-        .tasks;
-      const existing = [...(s.customTasks?.[key] || base)];
+      const existing = [...(s.customTasks?.[key] || [])];
       existing.splice(idx, 1);
       // Re-index taskChecks: shift all keys > idx down by 1
       const oldChecks = s.taskChecks?.[key] || {};
@@ -134,7 +125,6 @@ export function useRoadmap() {
         const n = parseInt(k);
         if (n < idx) newDayChecks[n] = v;
         else if (n > idx) newDayChecks[n - 1] = v;
-        // n === idx is dropped
       });
       return {
         ...s,
@@ -147,6 +137,15 @@ export function useRoadmap() {
     update((s) => ({
       ...s,
       customFocus: { ...s.customFocus, ["d" + s.currentDay]: focus },
+    }));
+
+  const updateWeekMeta = (weekNum, title, subtitle) =>
+    update((s) => ({
+      ...s,
+      customWeeks: {
+        ...s.customWeeks,
+        ["w" + weekNum]: { title, subtitle },
+      },
     }));
 
   const completeOnboarding = () =>
@@ -171,6 +170,7 @@ export function useRoadmap() {
     editTask,
     deleteTask,
     updateDayFocus,
+    updateWeekMeta,
     completeOnboarding,
   };
 }

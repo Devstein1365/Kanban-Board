@@ -32,6 +32,8 @@ export default function App() {
     addTask,
     editTask,
     deleteTask,
+    updateDayFocus,
+    updateWeekMeta,
     completeOnboarding,
   } = roadmap;
 
@@ -59,12 +61,20 @@ export default function App() {
           addTask={addTask}
           editTask={editTask}
           deleteTask={deleteTask}
+          updateDayFocus={updateDayFocus}
         />
       )}
       {tab === "kanban" && (
         <Kanban state={state} dayData={dayData} checks={checks} />
       )}
-      {tab === "weeks" && <Weeks state={state} week={week} goDay={goDay} />}
+      {tab === "weeks" && (
+        <Weeks
+          state={state}
+          week={week}
+          goDay={goDay}
+          updateWeekMeta={updateWeekMeta}
+        />
+      )}
       {tab === "projects" && (
         <Projects
           state={state}

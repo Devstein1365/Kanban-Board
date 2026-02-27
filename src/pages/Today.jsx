@@ -6,6 +6,7 @@ import {
   BsPlus,
   BsPencilSquare,
   BsTrash,
+  BsCalendarPlus,
 } from "react-icons/bs";
 import { TYPE_META } from "../data/constants";
 import { WEEKS } from "../data/constants";
@@ -24,10 +25,22 @@ export default function Today({
   addTask,
   editTask,
   deleteTask,
+  updateDayFocus,
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(null); // null = add mode
+  const [editIndex, setEditIndex] = useState(null);
+  const [editingFocus, setEditingFocus] = useState(false);
+  const [focusVal, setFocusVal] = useState("");
+
+  const openFocusEdit = () => {
+    setFocusVal(dayData.focus || "");
+    setEditingFocus(true);
+  };
+  const saveFocus = () => {
+    updateDayFocus(focusVal);
+    setEditingFocus(false);
+  };
 
   const openAdd = () => {
     setEditIndex(null);
@@ -128,7 +141,58 @@ export default function Today({
         </button>
         <div className="day-nav-info">
           <div className="day-nav-day">Day {state.currentDay}</div>
-          <div className="day-nav-focus">{dayData.focus}</div>
+          {editingFocus ? (
+            <div
+              style={{
+                display: "flex",
+                gap: 6,
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <input
+                className="form-input"
+                style={{ padding: "3px 8px", fontSize: 12, flex: 1 }}
+                value={focusVal}
+                onChange={(e) => setFocusVal(e.target.value)}
+                placeholder="What's the focus for today?"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") saveFocus();
+                  if (e.key === "Escape") setEditingFocus(false);
+                }}
+              />
+              <button
+                className="task-action-btn"
+                onClick={saveFocus}
+                title="Save"
+              >
+                ✓
+              </button>
+            </div>
+          ) : (
+            <div
+              className="day-nav-focus"
+              onClick={openFocusEdit}
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+              }}
+              title="Tap to set today's focus"
+            >
+              {dayData.focus || (
+                <span style={{ color: "var(--text3)" }}>
+                  Tap to set a focus…
+                </span>
+              )}
+              <BsPencilSquare
+                size={10}
+                style={{ color: "var(--text3)", flexShrink: 0 }}
+              />
+            </div>
+          )}
         </div>
         <button
           className="day-nav-btn"
@@ -141,6 +205,22 @@ export default function Today({
 
       {/* Schedule */}
       <div className="section-label">Today's Schedule</div>
+
+      {/* Empty state */}
+      {dayData.tasks.length === 0 && (
+        <div className="empty-state">
+          <BsCalendarPlus
+            size={34}
+            style={{ color: "var(--text3)", marginBottom: 12 }}
+          />
+          <div className="empty-state-title">No tasks yet</div>
+          <div className="empty-state-body">
+            Tap the + button below to add your first task for Day{" "}
+            {state.currentDay}. Give it a name, a time slot and a type.
+          </div>
+        </div>
+      )}
+
       <div className="schedule-list">
         {dayData.tasks.map((task, i) => {
           const tm = TYPE_META[task.type] || TYPE_META.personal;

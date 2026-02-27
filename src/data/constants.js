@@ -1,30 +1,31 @@
 // ─── WEEKS ────────────────────────────────────────────────────────────────────
+// Default titles — users can rename each week from the Weeks tab
 export const WEEKS = [
   {
     num: 1,
-    title: "React + TypeScript",
-    subtitle: "Days 1–7 · Build the Foundation",
+    title: "Week One",
+    subtitle: "Days 1–7",
     color: "#4f8ef7",
     days: [1, 2, 3, 4, 5, 6, 7],
   },
   {
     num: 2,
-    title: "Next.js + Backend",
-    subtitle: "Days 8–14 · Go Full-Stack",
+    title: "Week Two",
+    subtitle: "Days 8–14",
     color: "#22c55e",
     days: [8, 9, 10, 11, 12, 13, 14],
   },
   {
     num: 3,
-    title: "NestJS + AI + Paystack",
-    subtitle: "Days 15–21 · Advanced Integrations",
+    title: "Week Three",
+    subtitle: "Days 15–21",
     color: "#a855f7",
     days: [15, 16, 17, 18, 19, 20, 21],
   },
   {
     num: 4,
-    title: "Build & Ship Projects",
-    subtitle: "Days 22–30 · Pure Execution",
+    title: "Week Four",
+    subtitle: "Days 22–30",
     color: "#f97316",
     days: [22, 23, 24, 25, 26, 27, 28, 29, 30],
   },
