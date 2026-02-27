@@ -16,7 +16,7 @@ export const defaultState = () => ({
   completedDays: [],
   taskChecks: {},
   streak: 0,
-  projects: { p1: 0, p2: 0, p3: 0 },
+  projects: [], // array of { id, title, desc, tags, color, progress }
   logs: {},
   lastVisit: null,
   // User-created content

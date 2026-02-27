@@ -54,10 +54,38 @@ export function useRoadmap() {
   const goDay = (d) =>
     update((s) => ({ ...s, currentDay: Math.max(1, Math.min(30, d)) }));
 
-  const updateProject = (p, val) =>
+  // ── Project CRUD ─────────────────────────────────────────────────────────────
+  const addProject = (project) =>
     update((s) => ({
       ...s,
-      projects: { ...s.projects, [p]: parseInt(val) },
+      projects: [
+        ...(Array.isArray(s.projects) ? s.projects : []),
+        { id: Date.now(), progress: 0, ...project },
+      ],
+    }));
+
+  const editProject = (id, project) =>
+    update((s) => ({
+      ...s,
+      projects: (Array.isArray(s.projects) ? s.projects : []).map((p) =>
+        p.id === id ? { ...p, ...project } : p,
+      ),
+    }));
+
+  const deleteProject = (id) =>
+    update((s) => ({
+      ...s,
+      projects: (Array.isArray(s.projects) ? s.projects : []).filter(
+        (p) => p.id !== id,
+      ),
+    }));
+
+  const updateProjectProgress = (id, val) =>
+    update((s) => ({
+      ...s,
+      projects: (Array.isArray(s.projects) ? s.projects : []).map((p) =>
+        p.id === id ? { ...p, progress: parseInt(val) } : p,
+      ),
     }));
 
   const saveLog = (weekNum, key, val) =>
@@ -134,7 +162,10 @@ export function useRoadmap() {
     overallPct,
     toggleTask,
     goDay,
-    updateProject,
+    addProject,
+    editProject,
+    deleteProject,
+    updateProjectProgress,
     saveLog,
     addTask,
     editTask,

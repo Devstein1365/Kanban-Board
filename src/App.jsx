@@ -24,7 +24,10 @@ export default function App() {
     overallPct,
     toggleTask,
     goDay,
-    updateProject,
+    addProject,
+    editProject,
+    deleteProject,
+    updateProjectProgress,
     saveLog,
     addTask,
     editTask,
@@ -63,7 +66,13 @@ export default function App() {
       )}
       {tab === "weeks" && <Weeks state={state} week={week} goDay={goDay} />}
       {tab === "projects" && (
-        <Projects state={state} updateProject={updateProject} />
+        <Projects
+          state={state}
+          addProject={addProject}
+          editProject={editProject}
+          deleteProject={deleteProject}
+          updateProjectProgress={updateProjectProgress}
+        />
       )}
       {tab === "log" && <Log state={state} saveLog={saveLog} />}
       {tab === "guide" && <Guide />}

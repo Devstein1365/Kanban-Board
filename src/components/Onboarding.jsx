@@ -6,8 +6,8 @@ import {
   BsCheckCircle,
   BsKanban,
   BsBarChart,
-  BsJournalText,
   BsRocketTakeoff,
+  BsJournalText,
 } from "react-icons/bs";
 
 const STEPS = [
@@ -15,49 +15,55 @@ const STEPS = [
     icon: BsStars,
     color: "var(--accent)",
     title: "Welcome to Roadmap Tracker",
-    body: "Your personal 30-day coding journey — track tasks, projects and reflections all in one place.",
+    body: "Your personal 30-day coding journey — track daily tasks, build projects and write weekly reflections, all in one place.",
   },
   {
     icon: BsCalendarCheck,
     color: "var(--green)",
     title: "Today tab",
-    body: "See today's schedule, check off tasks as you go, and navigate to any day using the arrow buttons.",
+    body: "Every day has a default schedule to guide you. Check tasks off as you complete them and navigate to any day with the arrows.",
   },
   {
     icon: BsPlusCircle,
     color: "var(--accent)",
-    title: "Add your own tasks",
-    body: "Tap the blue + button at the bottom of the Today view to add a custom task. You can also edit or delete any task.",
+    title: "Customise your tasks",
+    body: "Tap the blue + button to add your own tasks to any day. Tap a task to expand it, then use Edit or Delete to change it.",
   },
   {
     icon: BsCheckCircle,
     color: "var(--green)",
     title: "Track your progress",
-    body: "Each checked task contributes to your daily completion. Finish all non-break tasks to mark the day complete.",
+    body: "Finishing all non-break tasks marks the day complete. Your streak and overall progress update automatically.",
   },
   {
     icon: BsKanban,
     color: "var(--purple)",
     title: "Board view",
-    body: "Switch to the Board tab to see today's tasks laid out in a Kanban-style: To do, In progress, and Done.",
+    body: "The Board tab shows today's tasks as a Kanban board — To Do, In Progress and Done — so you can see your flow at a glance.",
   },
   {
     icon: BsBarChart,
     color: "var(--orange)",
     title: "Weeks overview",
-    body: "The Weeks tab shows your full 30-day grid, week by week, with colour-coded day chips and overall progress.",
+    body: "The Weeks tab shows your full 30-day grid with colour-coded completion chips and a running progress bar per week.",
+  },
+  {
+    icon: BsRocketTakeoff,
+    color: "var(--teal)",
+    title: "Projects tab",
+    body: "Add any projects you're building — name them, describe them, pick your tech stack and drag the slider as you make progress.",
   },
   {
     icon: BsJournalText,
     color: "var(--yellow)",
     title: "Weekly log",
-    body: "After each week, head to the Log tab to write reflections: wins, blockers, ideas and key takeaways.",
+    body: "After each week, visit the Log tab to write your wins, blockers, ideas and key lessons. Reflection is how growth compounds.",
   },
   {
-    icon: BsRocketTakeoff,
-    color: "var(--teal)",
+    icon: BsStars,
+    color: "var(--accent)",
     title: "You're all set!",
-    body: "Start from Day 1 or jump to any day. Your data is saved locally on this device. Let's build something great!",
+    body: "Your data lives on this device. Start from Day 1 or jump to wherever you are. Now go build something great!",
   },
 ];
 

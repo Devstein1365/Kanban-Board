@@ -1,62 +1,112 @@
-import { BsRocketTakeoff, BsCheckCircleFill } from "react-icons/bs";
+import { useState } from "react";
+import {
+  BsRocketTakeoff,
+  BsCheckCircleFill,
+  BsPlus,
+  BsPencilSquare,
+  BsTrash,
+} from "react-icons/bs";
+import ProjectModal from "../components/ProjectModal";
 
-const PROJECTS_DATA = [
-  {
-    id: "p1",
-    num: "01",
-    title: "AI Invoice & Payment Platform",
-    desc: "Freelancers create invoices, clients pay via Paystack. AI queries invoice data in plain English.",
-    tags: ["Next.js", "NestJS", "PostgreSQL", "Paystack", "OpenAI", "Prisma"],
-    color: "var(--accent)",
-  },
-  {
-    id: "p2",
-    num: "02",
-    title: "CollabSpace",
-    desc: "Real-time team workspace: Kanban boards, live chat, collaborative docs, AI summarization.",
-    tags: ["Next.js", "NestJS", "MongoDB", "Socket.io", "OpenAI", "Tailwind"],
-    color: "var(--purple)",
-  },
-  {
-    id: "p3",
-    num: "03",
-    title: "DevHire Africa",
-    desc: "Job board for African devs targeting remote work. AI matches profiles to jobs by skill similarity.",
-    tags: ["Next.js", "NestJS", "PostgreSQL", "pgvector", "Paystack", "OpenAI"],
-    color: "var(--teal)",
-  },
-];
-
-const getStatus = (val) => {
-  if (val === 0) return { label: "Not Started", cls: "locked", check: false };
-  if (val < 100) return { label: "Building...", cls: "building", check: false };
+const getStatus = (progress) => {
+  if (progress === 0)
+    return { label: "Not started", cls: "locked", check: false };
+  if (progress < 100)
+    return { label: "In progress", cls: "building", check: false };
   return { label: "Deployed", cls: "done", check: true };
 };
 
-export default function Projects({ state, updateProject }) {
+export default function Projects({
+  state,
+  addProject,
+  editProject,
+  deleteProject,
+  updateProjectProgress,
+}) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+
+  const projects = Array.isArray(state.projects) ? state.projects : [];
+
+  const openAdd = () => {
+    setEditingProject(null);
+    setModalOpen(true);
+  };
+  const openEdit = (p) => {
+    setEditingProject(p);
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingProject(null);
+  };
+
+  const handleSave = (data) => {
+    if (editingProject) editProject(editingProject.id, data);
+    else addProject(data);
+    closeModal();
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Delete this project?")) deleteProject(id);
+  };
+
   return (
     <div className="page">
+      {/* Banner */}
       <div className="rule-banner" style={{ marginBottom: 12 }}>
         <div className="rule-icon">
           <BsRocketTakeoff />
         </div>
         <div>
-          <div className="rule-title">Week 4 Projects</div>
+          <div className="rule-title">My Projects</div>
           <div className="rule-desc">
-            These 3 projects will get you hired. Update progress as you build in
-            Week 4.
+            Add the projects you're building during your 30-day journey. Track
+            progress as you go.
           </div>
         </div>
       </div>
 
-      {PROJECTS_DATA.map((p) => {
-        const val = state.projects?.[p.id] || 0;
-        const status = getStatus(val);
+      {/* Empty state */}
+      {projects.length === 0 && (
+        <div className="empty-state">
+          <BsRocketTakeoff
+            size={36}
+            style={{ color: "var(--text3)", marginBottom: 12 }}
+          />
+          <div className="empty-state-title">No projects yet</div>
+          <div className="empty-state-body">
+            Tap the + button below to add your first project — give it a name,
+            describe what you're building, tag your tech stack and track your
+            progress.
+          </div>
+        </div>
+      )}
+
+      {/* Project cards */}
+      {projects.map((p, idx) => {
+        const status = getStatus(p.progress || 0);
+        const color = p.color || "var(--accent)";
 
         return (
           <div key={p.id} className="project-card">
+            {/* Accent top bar */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 3,
+                background: color,
+                borderRadius: "var(--r) var(--r) 0 0",
+              }}
+            />
+
             <div className="p-header">
-              <span className="p-num">Project {p.num}</span>
+              <span className="p-num" style={{ color }}>
+                {String(idx + 1).padStart(2, "0")}
+              </span>
               <span
                 className={`p-status ${status.cls}`}
                 style={{ display: "flex", alignItems: "center", gap: 4 }}
@@ -66,41 +116,70 @@ export default function Projects({ state, updateProject }) {
                 )}
                 {status.label}
               </span>
+              <div style={{ display: "flex", gap: 6, marginLeft: "auto" }}>
+                <button
+                  className="task-action-btn"
+                  onClick={() => openEdit(p)}
+                  aria-label="Edit project"
+                >
+                  <BsPencilSquare size={12} />
+                </button>
+                <button
+                  className="task-action-btn danger"
+                  onClick={() => handleDelete(p.id)}
+                  aria-label="Delete project"
+                >
+                  <BsTrash size={12} />
+                </button>
+              </div>
             </div>
 
             <div className="p-title">{p.title}</div>
-            <div className="p-desc">{p.desc}</div>
+            {p.desc && <div className="p-desc">{p.desc}</div>}
 
-            <div className="p-tags">
-              {p.tags.map((t) => (
-                <span key={t} className="p-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
+            {p.tags && p.tags.length > 0 && (
+              <div className="p-tags">
+                {p.tags.map((t) => (
+                  <span key={t} className="p-tag">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="p-bar-label">
               <span>Progress</span>
-              <span style={{ color: p.color }}>{val}%</span>
+              <span style={{ color }}>{p.progress || 0}%</span>
             </div>
             <div className="p-bar">
               <div
                 className="p-bar-fill"
-                style={{ width: val + "%", background: p.color }}
+                style={{ width: (p.progress || 0) + "%", background: color }}
               />
             </div>
-
             <input
               type="range"
               min="0"
               max="100"
-              value={val}
+              value={p.progress || 0}
               className="p-slider"
-              onChange={(e) => updateProject(p.id, e.target.value)}
+              onChange={(e) => updateProjectProgress(p.id, e.target.value)}
             />
           </div>
         );
       })}
+
+      {/* FAB */}
+      <button className="fab" onClick={openAdd} aria-label="Add project">
+        <BsPlus size={28} />
+      </button>
+
+      <ProjectModal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        onSave={handleSave}
+        initialData={editingProject}
+      />
     </div>
   );
 }
