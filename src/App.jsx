@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRoadmap } from "./hooks/useRoadmap";
 import TopBar from "./components/TopBar";
 import NavTabs from "./components/NavTabs";
+import Onboarding from "./components/Onboarding";
 import Today from "./pages/Today";
 import Weeks from "./pages/Weeks";
 import Kanban from "./pages/Kanban";
@@ -25,10 +26,19 @@ export default function App() {
     goDay,
     updateProject,
     saveLog,
+    addTask,
+    editTask,
+    deleteTask,
+    completeOnboarding,
   } = roadmap;
 
   return (
     <div className="app">
+      {/* First-run onboarding tour */}
+      {!state.hasSeenOnboarding && (
+        <Onboarding onComplete={completeOnboarding} />
+      )}
+
       <TopBar currentDay={state.currentDay} overallPct={overallPct} />
       <NavTabs activeTab={tab} onTabChange={setTab} />
 
@@ -43,6 +53,9 @@ export default function App() {
           overallPct={overallPct}
           toggleTask={toggleTask}
           goDay={goDay}
+          addTask={addTask}
+          editTask={editTask}
+          deleteTask={deleteTask}
         />
       )}
       {tab === "kanban" && (

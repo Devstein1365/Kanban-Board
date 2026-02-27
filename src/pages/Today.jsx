@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { BsLightningChargeFill, BsCheck, BsCheckLg } from "react-icons/bs";
+import {
+  BsLightningChargeFill,
+  BsCheck,
+  BsCheckLg,
+  BsPlus,
+  BsPencilSquare,
+  BsTrash,
+} from "react-icons/bs";
 import { TYPE_META } from "../data/constants";
 import { WEEKS } from "../data/constants";
+import TaskModal from "../components/TaskModal";
 
 export default function Today({
   state,
@@ -13,8 +21,38 @@ export default function Today({
   overallPct,
   toggleTask,
   goDay,
+  addTask,
+  editTask,
+  deleteTask,
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editIndex, setEditIndex] = useState(null); // null = add mode
+
+  const openAdd = () => {
+    setEditIndex(null);
+    setModalOpen(true);
+  };
+  const openEdit = (i, e) => {
+    e.stopPropagation();
+    setEditIndex(i);
+    setModalOpen(true);
+  };
+  const closeModal = () => setModalOpen(false);
+
+  const handleSave = (task) => {
+    if (editIndex === null) addTask(task);
+    else editTask(editIndex, task);
+    setModalOpen(false);
+  };
+
+  const handleDelete = (i, e) => {
+    e.stopPropagation();
+    if (window.confirm("Delete this task?")) {
+      deleteTask(i);
+      setExpandedTask(null);
+    }
+  };
 
   return (
     <div className="page">
@@ -141,7 +179,25 @@ export default function Today({
                 <div className="si-time">{task.time}</div>
                 <div className="si-activity">{task.activity}</div>
                 {expanded ? (
-                  <div className="si-detail">{task.detail}</div>
+                  <>
+                    <div className="si-detail">{task.detail}</div>
+                    <div className="task-actions">
+                      <button
+                        className="task-action-btn"
+                        onClick={(e) => openEdit(i, e)}
+                        aria-label="Edit task"
+                      >
+                        <BsPencilSquare size={13} /> Edit
+                      </button>
+                      <button
+                        className="task-action-btn danger"
+                        onClick={(e) => handleDelete(i, e)}
+                        aria-label="Delete task"
+                      >
+                        <BsTrash size={13} /> Delete
+                      </button>
+                    </div>
+                  </>
                 ) : (
                   <div
                     className="si-detail"
@@ -167,6 +223,19 @@ export default function Today({
           );
         })}
       </div>
+
+      {/* FAB — Add task */}
+      <button className="fab" onClick={openAdd} aria-label="Add task">
+        <BsPlus size={28} />
+      </button>
+
+      {/* Task Modal */}
+      <TaskModal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        onSave={handleSave}
+        initialData={editIndex !== null ? dayData.tasks[editIndex] : null}
+      />
     </div>
   );
 }

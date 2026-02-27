@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0a0a0a"/>
+  <rect x="40" y="40" width="432" height="432" rx="80" fill="#111111"/>
+  <!-- Accent dot -->
+  <circle cx="256" cy="140" r="36" fill="#4f8ef7"/>
+  <!-- "30" text -->
+  <text x="256" y="310" font-family="sans-serif" font-weight="800" font-size="148" text-anchor="middle" fill="#efefef">30</text>
+  <!-- Subtitle bar -->
+  <rect x="120" y="340" width="272" height="4" rx="2" fill="#4f8ef7" opacity="0.6"/>
+</svg>

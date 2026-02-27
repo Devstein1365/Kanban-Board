@@ -14,10 +14,17 @@ export function useRoadmap() {
   }, []);
 
   // ── Derived values ──────────────────────────────────────────────────────────
-  const dayData =
+  const dayKey = "d" + state.currentDay;
+  const baseDay =
     ALL_DAYS.find((d) => d.day === state.currentDay) || ALL_DAYS[0];
+  // Merge user overrides on top of template data
+  const dayData = {
+    ...baseDay,
+    focus: state.customFocus?.[dayKey] || baseDay.focus,
+    tasks: state.customTasks?.[dayKey] || baseDay.tasks,
+  };
   const week = WEEKS.find((w) => w.days.includes(state.currentDay)) || WEEKS[0];
-  const checks = state.taskChecks?.["d" + state.currentDay] || {};
+  const checks = state.taskChecks?.[dayKey] || {};
   const doneCount = Object.values(checks).filter(Boolean).length;
   const totalCount = dayData.tasks.length;
   const overallPct = Math.round((state.completedDays.length / 30) * 100);
@@ -29,9 +36,12 @@ export function useRoadmap() {
       const c = { ...(s.taskChecks[key] || {}) };
       c[idx] = !c[idx];
       const newChecks = { ...s.taskChecks, [key]: c };
+      const tasks =
+        s.customTasks?.[key] ||
+        (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0]).tasks;
       const doneTasks = Object.values(c).filter(Boolean).length;
       const allDone =
-        doneTasks >= dayData.tasks.filter((t) => t.type !== "break").length;
+        doneTasks >= tasks.filter((t) => t.type !== "break").length;
       const completedDays =
         allDone && !s.completedDays.includes(s.currentDay)
           ? [...s.completedDays, s.currentDay]
@@ -59,6 +69,61 @@ export function useRoadmap() {
       },
     }));
 
+  // ── Task CRUD ────────────────────────────────────────────────────────────────
+  const addTask = (task) =>
+    update((s) => {
+      const key = "d" + s.currentDay;
+      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
+        .tasks;
+      const existing = s.customTasks?.[key] || base;
+      return {
+        ...s,
+        customTasks: { ...s.customTasks, [key]: [...existing, task] },
+      };
+    });
+
+  const editTask = (idx, task) =>
+    update((s) => {
+      const key = "d" + s.currentDay;
+      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
+        .tasks;
+      const existing = [...(s.customTasks?.[key] || base)];
+      existing[idx] = task;
+      return { ...s, customTasks: { ...s.customTasks, [key]: existing } };
+    });
+
+  const deleteTask = (idx) =>
+    update((s) => {
+      const key = "d" + s.currentDay;
+      const base = (ALL_DAYS.find((d) => d.day === s.currentDay) || ALL_DAYS[0])
+        .tasks;
+      const existing = [...(s.customTasks?.[key] || base)];
+      existing.splice(idx, 1);
+      // Re-index taskChecks: shift all keys > idx down by 1
+      const oldChecks = s.taskChecks?.[key] || {};
+      const newDayChecks = {};
+      Object.entries(oldChecks).forEach(([k, v]) => {
+        const n = parseInt(k);
+        if (n < idx) newDayChecks[n] = v;
+        else if (n > idx) newDayChecks[n - 1] = v;
+        // n === idx is dropped
+      });
+      return {
+        ...s,
+        customTasks: { ...s.customTasks, [key]: existing },
+        taskChecks: { ...s.taskChecks, [key]: newDayChecks },
+      };
+    });
+
+  const updateDayFocus = (focus) =>
+    update((s) => ({
+      ...s,
+      customFocus: { ...s.customFocus, ["d" + s.currentDay]: focus },
+    }));
+
+  const completeOnboarding = () =>
+    update((s) => ({ ...s, hasSeenOnboarding: true }));
+
   return {
     state,
     dayData,
@@ -71,5 +136,10 @@ export function useRoadmap() {
     goDay,
     updateProject,
     saveLog,
+    addTask,
+    editTask,
+    deleteTask,
+    updateDayFocus,
+    completeOnboarding,
   };
 }
