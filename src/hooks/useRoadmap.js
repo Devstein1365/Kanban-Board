@@ -23,7 +23,10 @@ export function useRoadmap() {
   };
   const week = WEEKS.find((w) => w.days.includes(state.currentDay)) || WEEKS[0];
   const checks = state.taskChecks?.[dayKey] || {};
-  const doneCount = Object.values(checks).filter(Boolean).length;
+  // Only count checks that fall within the current task list (avoids stale old-data counts)
+  const doneCount = Object.entries(checks).filter(
+    ([k, v]) => v && parseInt(k) < dayData.tasks.length,
+  ).length;
   const totalCount = dayData.tasks.length;
   const overallPct = Math.round((state.completedDays.length / 30) * 100);
 

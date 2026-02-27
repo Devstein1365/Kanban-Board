@@ -17,10 +17,18 @@ function WeekTitleEditor({ value, onSave, onCancel }) {
           if (e.key === "Escape") onCancel();
         }}
       />
-      <button className="task-action-btn" onClick={() => onSave(val)} title="Save">
+      <button
+        className="task-action-btn"
+        onClick={() => onSave(val)}
+        title="Save"
+      >
         <BsCheck size={14} />
       </button>
-      <button className="task-action-btn danger" onClick={onCancel} title="Cancel">
+      <button
+        className="task-action-btn danger"
+        onClick={onCancel}
+        title="Cancel"
+      >
         <BsX size={14} />
       </button>
     </div>
@@ -108,7 +116,14 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
                 onCancel={() => setEditingWeek(null)}
               />
             ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginBottom: 4,
+                }}
+              >
                 <div
                   style={{
                     fontFamily: "var(--font-display)",
@@ -133,7 +148,12 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
 
             {/* Editable week subtitle */}
             <div
-              style={{ fontSize: 11, color: "var(--text3)", marginBottom: 10, cursor: "text" }}
+              style={{
+                fontSize: 11,
+                color: "var(--text3)",
+                marginBottom: 10,
+                cursor: "text",
+              }}
               onClick={() => !isEditing && setEditingWeek(w.num)}
               title="Click week title to rename"
             >
@@ -152,39 +172,6 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
                     className={`day-dot-btn${isDone ? " done" : isToday ? " today" : ""}`}
                     onClick={() => goDay(d)}
                     title={focus || "Day " + d}
-                  >
-                    {d}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Progress bar */}
-            <div className="p-bar">
-              <div
-                className="p-bar-fill"
-                style={{ width: pct + "%", background: w.color }}
-              />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-
-            {/* Day dots */}
-            <div className="day-dots-row">
-              {w.days.map((d) => {
-                const isDone = state.completedDays.includes(d);
-                const isToday = d === state.currentDay;
-                return (
-                  <button
-                    key={d}
-                    className={`day-dot-btn${isDone ? " done" : isToday ? " today" : ""}`}
-                    onClick={() => goDay(d)}
-                    title={ALL_DAYS.find((x) => x.day === d)?.focus}
                   >
                     {d}
                   </button>
