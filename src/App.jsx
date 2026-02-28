@@ -3,6 +3,7 @@ import { useRoadmap } from "./hooks/useRoadmap";
 import TopBar from "./components/TopBar";
 import NavTabs from "./components/NavTabs";
 import Onboarding from "./components/Onboarding";
+import InstallPrompt from "./components/InstallPrompt";
 import Today from "./pages/Today";
 import Weeks from "./pages/Weeks";
 import Kanban from "./pages/Kanban";
@@ -103,6 +104,7 @@ export default function App() {
       )}
       {tab === "log" && <Log state={state} saveLog={saveLog} />}
       {tab === "guide" && <Guide />}
+      <InstallPrompt />
     </div>
   );
 }

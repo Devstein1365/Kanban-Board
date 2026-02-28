@@ -1,0 +1,9 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+  <rect width='512' height='512' rx='110' fill='#0a0a0e'/>
+  <circle cx='256' cy='256' r='180' fill='#111827'/>
+  <circle cx='256' cy='256' r='170' fill='none' stroke='#1d2d50' stroke-width='2'/>
+  <circle cx='256' cy='256' r='140' fill='none' stroke='#4f8ef7' stroke-width='8' stroke-dasharray='660' stroke-dashoffset='220' stroke-linecap='round' transform='rotate(-90 256 256)'/>
+  <text x='256' y='230' text-anchor='middle' font-family='Arial Black,sans-serif' font-weight='900' font-size='100' fill='#ffffff'>30</text>
+  <text x='256' y='310' text-anchor='middle' font-family='Arial,sans-serif' font-weight='400' font-size='38' fill='#4f8ef7' letter-spacing='6'>DAYS</text>
+  <circle cx='256' cy='345' r='6' fill='#4f8ef7'/>
+</svg>

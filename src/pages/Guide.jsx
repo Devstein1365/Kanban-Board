@@ -98,8 +98,13 @@ export default function Guide() {
   const [confirming, setConfirming] = useState(false);
 
   const handleReset = () => {
-    localStorage.removeItem("roadmap-app-v2");
-    localStorage.removeItem("roadmap-theme");
+    // Preserve hasSeenOnboarding so the tutorial never re-fires
+    // Also clear milestone history so they fire fresh on the new sprint
+    localStorage.setItem(
+      "roadmap-app-v2",
+      JSON.stringify({ hasSeenOnboarding: true }),
+    );
+    localStorage.removeItem("roadmap-milestones");
     window.location.reload();
   };
 
