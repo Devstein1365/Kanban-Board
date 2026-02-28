@@ -36,17 +36,17 @@
 }
 
 [data-theme="light"] {
-  --bg: #f0f2f6;
-  --s1: #ffffff;
-  --s2: #f7f8fa;
-  --s3: #edf0f4;
-  --s4: #e2e6ed;
-  --border: #e3e7ee;
-  --border2: #c9ced9;
-  --text: #0f1117;
+  --bg: #e3e6ef;
+  --s1: #eceff7;
+  --s2: #e6e9f3;
+  --s3: #dde1ed;
+  --s4: #d3d8e7;
+  --border: #d4d9e8;
+  --border2: #bcc3d3;
+  --text: #111827;
   --text2: #4b5563;
-  --text3: #94a3b8;
-  --bg-glass: rgba(240, 242, 246, 0.94);
+  --text3: #8b97ab;
+  --bg-glass: rgba(227, 230, 239, 0.95);
 }
 
 body {
@@ -98,6 +98,8 @@ textarea {
   background: var(--bg-glass);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
+  padding: 14px max(18px, env(safe-area-inset-right, 0px)) 10px
+    max(18px, env(safe-area-inset-left, 0px));
 }
 .topbar-row1 {
   display: flex;
@@ -198,7 +200,9 @@ textarea {
 
 /* ── PAGE ── */
 .page {
-  padding: 16px;
+  padding: 16px max(16px, env(safe-area-inset-right, 0px))
+    calc(90px + env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
   animation: fadeUp 0.25s ease;
 }
 @keyframes fadeUp {
@@ -838,7 +842,7 @@ textarea {
 /* ── FAB ── */
 .fab {
   position: fixed;
-  bottom: 24px;
+  bottom: max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));
   right: max(16px, calc(50vw - 215px));
   width: 52px;
   height: 52px;

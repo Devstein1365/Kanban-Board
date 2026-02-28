@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const SECTIONS = [
   {
     label: "Getting Started",
@@ -87,13 +89,20 @@ const SECTIONS = [
       {
         title: "Day 30 is not the end",
         desc: "The habit you build in 30 days is the real deliverable. The apps are proof. Use this tracker again for the next sprint, with harder projects and tighter deadlines. Clear your data and go again.",
-        tip: "You can reset the app by clearing your browser local storage for this site.",
       },
     ],
   },
 ];
 
 export default function Guide() {
+  const [confirming, setConfirming] = useState(false);
+
+  const handleReset = () => {
+    localStorage.removeItem("roadmap-app-v2");
+    localStorage.removeItem("roadmap-theme");
+    window.location.reload();
+  };
+
   return (
     <div className="page">
       <div className="card" style={{ marginBottom: 10, padding: "14px 16px" }}>
@@ -154,7 +163,7 @@ export default function Guide() {
                   padding: "14px 16px",
                   borderBottom:
                     i < section.items.length - 1
-                      ? "1px solid rgba(255,255,255,0.06)"
+                      ? "1px solid var(--border)"
                       : "none",
                 }}
               >
@@ -222,6 +231,130 @@ export default function Guide() {
           </div>
         </div>
       ))}
+
+      {/* ── Reset App Data ── */}
+      <div style={{ marginTop: 10, marginBottom: 6 }}>
+        <div
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--red)",
+            padding: "8px 4px 4px",
+          }}
+        >
+          Danger Zone
+        </div>
+        <div className="card" style={{ padding: "16px" }}>
+          <div
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              marginBottom: 6,
+              color: "var(--text)",
+            }}
+          >
+            Reset all app data
+          </div>
+          <div
+            style={{
+              fontSize: 12,
+              color: "var(--text2)",
+              lineHeight: 1.65,
+              marginBottom: 14,
+            }}
+          >
+            This permanently deletes all your tasks, projects, logs and
+            progress. Use this to start a fresh 30-day sprint. This cannot be
+            undone.
+          </div>
+
+          {!confirming ? (
+            <button
+              onClick={() => setConfirming(true)}
+              style={{
+                width: "100%",
+                padding: "10px 16px",
+                background: "rgba(239,68,68,0.08)",
+                border: "1px solid rgba(239,68,68,0.35)",
+                borderRadius: "var(--rs)",
+                color: "var(--red)",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "background 0.15s",
+              }}
+            >
+              Reset App Data
+            </button>
+          ) : (
+            <div
+              style={{
+                background: "rgba(239,68,68,0.06)",
+                border: "1px solid rgba(239,68,68,0.3)",
+                borderRadius: "var(--rs)",
+                padding: "14px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "var(--red)",
+                  marginBottom: 6,
+                }}
+              >
+                Are you sure?
+              </div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "var(--text2)",
+                  marginBottom: 14,
+                  lineHeight: 1.5,
+                }}
+              >
+                All your data will be gone. There is no going back.
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={handleReset}
+                  style={{
+                    flex: 1,
+                    padding: "9px 12px",
+                    background: "var(--red)",
+                    border: "none",
+                    borderRadius: "var(--rs)",
+                    color: "#fff",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Yes, reset everything
+                </button>
+                <button
+                  onClick={() => setConfirming(false)}
+                  style={{
+                    flex: 1,
+                    padding: "9px 12px",
+                    background: "var(--s3)",
+                    border: "1px solid var(--border)",
+                    borderRadius: "var(--rs)",
+                    color: "var(--text2)",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
