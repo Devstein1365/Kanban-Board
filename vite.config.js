@@ -18,8 +18,8 @@ export default defineConfig({
         "apple-touch-icon.png",
       ],
       manifest: {
-        name: "30-Day Build Tracker",
-        short_name: "30-Day Build",
+        name: "Kanban Board",
+        short_name: "Kanban Board",
         description:
           "Your personal 30-day coding sprint tracker. Plan daily tasks, track projects, and build the habit of finishing.",
         theme_color: "#0a0a0e",

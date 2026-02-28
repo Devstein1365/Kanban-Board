@@ -20,7 +20,7 @@ export default function TopBar({
       <div className="topbar-row1">
         <div className="app-title">
           <div className="title-dot" />
-          30-Day Build
+          Kanban Board
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button

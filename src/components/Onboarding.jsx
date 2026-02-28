@@ -14,7 +14,7 @@ const STEPS = [
   {
     icon: BsStars,
     color: "var(--accent)",
-    title: "Welcome to Roadmap Tracker",
+    title: "Welcome to Kanban Board",
     body: "Your personal 30-day coding journey — track daily tasks, build projects and write weekly reflections, all in one place.",
   },
   {
