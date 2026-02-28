@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRoadmap } from "./hooks/useRoadmap";
 import TopBar from "./components/TopBar";
 import NavTabs from "./components/NavTabs";
@@ -12,7 +12,19 @@ import Guide from "./pages/Guide";
 
 export default function App() {
   const [tab, setTab] = useState("today");
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("roadmap-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", saved);
+    return saved;
+  });
   const roadmap = useRoadmap();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("roadmap-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const {
     state,
@@ -44,7 +56,12 @@ export default function App() {
         <Onboarding onComplete={completeOnboarding} />
       )}
 
-      <TopBar currentDay={state.currentDay} overallPct={overallPct} />
+      <TopBar
+        currentDay={state.currentDay}
+        overallPct={overallPct}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
       <NavTabs activeTab={tab} onTabChange={setTab} />
 
       {tab === "today" && (

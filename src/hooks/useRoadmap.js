@@ -28,7 +28,10 @@ export function useRoadmap() {
     ([k, v]) => v && parseInt(k) < dayData.tasks.length,
   ).length;
   const totalCount = dayData.tasks.length;
-  const overallPct = Math.round((state.completedDays.length / 30) * 100);
+  const validCompleted = state.completedDays.filter(
+    (d) => (state.customTasks?.["d" + d]?.length || 0) > 0,
+  );
+  const overallPct = Math.round((validCompleted.length / 30) * 100);
 
   // ── Actions ─────────────────────────────────────────────────────────────────
   const toggleTask = (idx) => {

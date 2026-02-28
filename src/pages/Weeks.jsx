@@ -67,8 +67,10 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
 
       {/* Week Cards */}
       {WEEKS.map((w) => {
-        const doneDays = w.days.filter((d) =>
-          state.completedDays.includes(d),
+        const doneDays = w.days.filter(
+          (d) =>
+            state.completedDays.includes(d) &&
+            (state.customTasks?.["d" + d]?.length || 0) > 0,
         ).length;
         const pct = Math.round((doneDays / w.days.length) * 100);
         const isEditing = editingWeek === w.num;
@@ -102,7 +104,7 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
                 }}
               >
                 {pct}%
-              </div>
+              </div>v
             </div>
 
             {/* Editable week title */}
@@ -163,7 +165,9 @@ export default function Weeks({ state, week, goDay, updateWeekMeta }) {
             {/* Day dots */}
             <div className="day-dots-row">
               {w.days.map((d) => {
-                const isDone = state.completedDays.includes(d);
+                const isDone =
+                  state.completedDays.includes(d) &&
+                  (state.customTasks?.["d" + d]?.length || 0) > 0;
                 const isToday = d === state.currentDay;
                 const focus = state.customFocus?.["d" + d];
                 return (

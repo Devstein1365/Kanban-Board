@@ -41,6 +41,9 @@ export default function Today({
     updateDayFocus(focusVal);
     setEditingFocus(false);
   };
+  const cancelFocus = () => {
+    setEditingFocus(false);
+  };
 
   const openAdd = () => {
     setEditIndex(null);
@@ -159,15 +162,26 @@ export default function Today({
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") saveFocus();
-                  if (e.key === "Escape") setEditingFocus(false);
+                  if (e.key === "Escape") cancelFocus();
                 }}
+                onBlur={cancelFocus}
               />
               <button
                 className="task-action-btn"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={saveFocus}
                 title="Save"
               >
                 ✓
+              </button>
+              <button
+                className="task-action-btn"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={cancelFocus}
+                title="Cancel"
+                style={{ opacity: 0.6 }}
+              >
+                ✕
               </button>
             </div>
           ) : (

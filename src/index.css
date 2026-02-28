@@ -27,11 +27,26 @@
   --yellow: #eab308;
   --teal: #14b8a6;
   --red: #ef4444;
+  --bg-glass: rgba(10, 10, 10, 0.92);
   --r: 10px;
   --rs: 6px;
   --font-display: "Syne", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   --font-body: "Outfit", sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: #f0f2f6;
+  --s1: #ffffff;
+  --s2: #f7f8fa;
+  --s3: #edf0f4;
+  --s4: #e2e6ed;
+  --border: #e3e7ee;
+  --border2: #c9ced9;
+  --text: #0f1117;
+  --text2: #4b5563;
+  --text3: #94a3b8;
+  --bg-glass: rgba(240, 242, 246, 0.94);
 }
 
 body {
@@ -80,10 +95,9 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10, 10, 10, 0.92);
+  background: var(--bg-glass);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  padding: 14px 18px 10px;
 }
 .topbar-row1 {
   display: flex;
@@ -150,7 +164,7 @@ textarea {
   position: sticky;
   top: 85px;
   z-index: 90;
-  background: rgba(10, 10, 10, 0.92);
+  background: var(--bg-glass);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -645,6 +659,10 @@ textarea {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text3);
 }
+[data-theme="light"] .p-status.locked {
+  background: var(--s3);
+  color: var(--text3);
+}
 .p-status.building {
   background: rgba(79, 142, 247, 0.15);
   color: var(--accent);
@@ -1125,6 +1143,31 @@ textarea {
   color: var(--text3);
   line-height: 1.7;
   max-width: 260px;
+}
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--s3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.theme-toggle-btn:hover {
+  background: var(--s4);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* ── COLOR SWATCHES (ProjectModal) ── */
