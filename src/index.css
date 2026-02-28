@@ -1198,3 +1198,197 @@ textarea {
   border-color: var(--text);
   transform: scale(1.2);
 }
+
+/* ── DAY COMPLETE BANNER ── */
+.day-complete-banner {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1),
+    rgba(79, 142, 247, 0.07)
+  );
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  border-radius: var(--r);
+  padding: 22px 16px 18px;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: bannerPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes bannerPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.day-complete-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.confetti-dot {
+  position: absolute;
+  top: 100%;
+  animation: confettiRise linear forwards;
+}
+@keyframes confettiRise {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-95px) rotate(240deg);
+    opacity: 0;
+  }
+}
+.day-complete-check {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  margin: 0 auto 12px;
+}
+.day-complete-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.day-complete-sub {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* ── MILESTONE OVERLAY ── */
+.milestone-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(6px);
+}
+.milestone-card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 28px 24px 22px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  animation: milestoneIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes milestoneIn {
+  from {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+.milestone-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 99px;
+}
+.milestone-icon-wrap {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.milestone-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.milestone-sub {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+  max-width: 270px;
+}
+.milestone-stats {
+  display: flex;
+  align-items: center;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 0;
+  width: 100%;
+}
+.milestone-stat {
+  flex: 1;
+  text-align: center;
+}
+.milestone-stat-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.milestone-stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.milestone-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.milestone-btn {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--rs);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: var(--font-body);
+}
+.milestone-btn:hover {
+  opacity: 0.88;
+}
+.milestone-dismiss {
+  font-size: 11px;
+  color: var(--text3);
+}

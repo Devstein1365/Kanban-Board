@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   BsLightningChargeFill,
   BsCheck,
@@ -7,10 +7,62 @@ import {
   BsPencilSquare,
   BsTrash,
   BsCalendarPlus,
+  BsTrophyFill,
+  BsGraphUp,
+  BsCheckCircleFill,
 } from "react-icons/bs";
 import { TYPE_META } from "../data/constants";
 import { WEEKS } from "../data/constants";
 import TaskModal from "../components/TaskModal";
+
+const CONFETTI_COLORS = [
+  "#4f8ef7",
+  "#22c55e",
+  "#a855f7",
+  "#eab308",
+  "#f97316",
+  "#14b8a6",
+];
+const CONFETTI_DOTS = Array.from({ length: 16 }, (_, i) => ({
+  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+  left: `${4 + i * 6}%`,
+  delay: `${(i * 0.09) % 1.0}s`,
+  size: i % 3 === 0 ? 7 : 5,
+  dur: `${1.2 + (i % 4) * 0.18}s`,
+  isCircle: i % 2 === 0,
+}));
+
+const MILESTONES = [7, 14, 21, 30];
+const MILESTONE_META = {
+  7: {
+    icon: BsLightningChargeFill,
+    color: "#f97316",
+    label: "One week in!",
+    sub: "7 days of showing up. Consistency is the skill.",
+    tag: "Week 1 Done",
+  },
+  14: {
+    icon: BsGraphUp,
+    color: "#4f8ef7",
+    label: "Halfway there!",
+    sub: "14 days done. The habit is forming — keep feeding it.",
+    tag: "Week 2 Done",
+  },
+  21: {
+    icon: BsCheckCircleFill,
+    color: "#22c55e",
+    label: "Three weeks!",
+    sub: "21 days. This is where most people quit. You didn't.",
+    tag: "Week 3 Done",
+  },
+  30: {
+    icon: BsTrophyFill,
+    color: "#eab308",
+    label: "Sprint complete!",
+    sub: "30 days finished. Ship your projects and run it again.",
+    tag: "All 30 Days!",
+  },
+};
 
 export default function Today({
   state,
@@ -32,6 +84,38 @@ export default function Today({
   const [editIndex, setEditIndex] = useState(null);
   const [editingFocus, setEditingFocus] = useState(false);
   const [focusVal, setFocusVal] = useState("");
+  const [showMilestone, setShowMilestone] = useState(false);
+  const [milestoneDay, setMilestoneDay] = useState(null);
+
+  useEffect(() => {
+    if (
+      doneCount === totalCount &&
+      totalCount > 0 &&
+      MILESTONES.includes(state.currentDay)
+    ) {
+      const seen = JSON.parse(
+        localStorage.getItem("roadmap-milestones") || "[]",
+      );
+      if (!seen.includes(state.currentDay)) {
+        setMilestoneDay(state.currentDay);
+        setShowMilestone(true);
+      }
+    }
+  }, [doneCount, totalCount, state.currentDay]);
+
+  const closeMilestone = () => {
+    const seen = JSON.parse(localStorage.getItem("roadmap-milestones") || "[]");
+    if (!seen.includes(milestoneDay)) {
+      localStorage.setItem(
+        "roadmap-milestones",
+        JSON.stringify([...seen, milestoneDay]),
+      );
+    }
+    setShowMilestone(false);
+  };
+
+  const milestoneInfo = milestoneDay ? MILESTONE_META[milestoneDay] : null;
+  const MilestoneIcon = milestoneInfo?.icon ?? null;
 
   const openFocusEdit = () => {
     setFocusVal(dayData.focus || "");
@@ -220,6 +304,38 @@ export default function Today({
       {/* Schedule */}
       <div className="section-label">Today's Schedule</div>
 
+      {/* Day Complete Banner */}
+      {doneCount === totalCount && totalCount > 0 && (
+        <div className="day-complete-banner">
+          <div className="day-complete-confetti" aria-hidden="true">
+            {CONFETTI_DOTS.map((d, i) => (
+              <div
+                key={i}
+                className="confetti-dot"
+                style={{
+                  left: d.left,
+                  background: d.color,
+                  width: d.size,
+                  height: d.size,
+                  borderRadius: d.isCircle ? "50%" : "2px",
+                  animationDelay: d.delay,
+                  animationDuration: d.dur,
+                }}
+              />
+            ))}
+          </div>
+          <div className="day-complete-check">
+            <BsCheckLg size={26} />
+          </div>
+          <div className="day-complete-title">
+            Day {state.currentDay} Complete
+          </div>
+          <div className="day-complete-sub">
+            {totalCount} task{totalCount !== 1 ? "s" : ""} done · Nice work!
+          </div>
+        </div>
+      )}
+
       {/* Empty state */}
       {dayData.tasks.length === 0 && (
         <div className="empty-state">
@@ -317,6 +433,65 @@ export default function Today({
           );
         })}
       </div>
+
+      {/* Milestone Overlay */}
+      {showMilestone && milestoneInfo && (
+        <div className="milestone-overlay" onClick={closeMilestone}>
+          <div className="milestone-card" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="milestone-tag"
+              style={{
+                background: milestoneInfo.color + "22",
+                color: milestoneInfo.color,
+                border: `1px solid ${milestoneInfo.color}44`,
+              }}
+            >
+              {milestoneInfo.tag}
+            </div>
+            <div
+              className="milestone-icon-wrap"
+              style={{ background: milestoneInfo.color + "18" }}
+            >
+              {MilestoneIcon && (
+                <MilestoneIcon
+                  size={36}
+                  style={{ color: milestoneInfo.color }}
+                />
+              )}
+            </div>
+            <div className="milestone-title">{milestoneInfo.label}</div>
+            <div className="milestone-sub">{milestoneInfo.sub}</div>
+            <div className="milestone-stats">
+              <div className="milestone-stat">
+                <div className="milestone-stat-val">
+                  {state.completedDays.length}
+                </div>
+                <div className="milestone-stat-label">Days done</div>
+              </div>
+              <div className="milestone-stat-divider" />
+              <div className="milestone-stat">
+                <div className="milestone-stat-val">{state.streak}</div>
+                <div className="milestone-stat-label">Streak</div>
+              </div>
+              <div className="milestone-stat-divider" />
+              <div className="milestone-stat">
+                <div className="milestone-stat-val">
+                  {state.projects.length}
+                </div>
+                <div className="milestone-stat-label">Projects</div>
+              </div>
+            </div>
+            <button
+              className="milestone-btn"
+              style={{ background: milestoneInfo.color }}
+              onClick={closeMilestone}
+            >
+              Keep going →
+            </button>
+            <div className="milestone-dismiss">Tap anywhere to close</div>
+          </div>
+        </div>
+      )}
 
       {/* FAB — Add task */}
       <button className="fab" onClick={openAdd} aria-label="Add task">
