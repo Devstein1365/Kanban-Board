@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
-import { TYPE_META } from "../data/constants";
+import { useState } from "react";
 import { BsX } from "react-icons/bs";
+import TimePicker from "./TimePicker";
+import TypeSelect from "./TypeSelect";
 
 const EMPTY = { activity: "", time: "", type: "learning", detail: "" };
 
 export default function TaskModal({ isOpen, onClose, onSave, initialData }) {
   const [form, setForm] = useState(EMPTY);
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
 
-  useEffect(() => {
+  // Reset form when modal opens (during-render update — avoids setState-in-effect)
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) setForm(initialData ? { ...EMPTY, ...initialData } : EMPTY);
-  }, [isOpen, initialData]);
+  }
 
   if (!isOpen) return null;
 
@@ -40,26 +44,11 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }) {
             autoFocus
           />
 
-          <label className="form-label">Time</label>
-          <input
-            className="form-input"
-            placeholder="e.g. 9:00–10:00 AM"
-            value={form.time}
-            onChange={(e) => set("time", e.target.value)}
-          />
+          <label className="form-label">Time Slot</label>
+          <TimePicker value={form.time} onChange={(val) => set("time", val)} />
 
           <label className="form-label">Type</label>
-          <select
-            className="form-select"
-            value={form.type}
-            onChange={(e) => set("type", e.target.value)}
-          >
-            {Object.entries(TYPE_META).map(([key, meta]) => (
-              <option key={key} value={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </option>
-            ))}
-          </select>
+          <TypeSelect value={form.type} onChange={(val) => set("type", val)} />
 
           <label className="form-label">Detail</label>
           <textarea
