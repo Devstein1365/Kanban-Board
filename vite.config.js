@@ -9,6 +9,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "auto",
+      manifestFilename: "manifest.json",
       includeAssets: [
         "icon.svg",
         "icon.png",
